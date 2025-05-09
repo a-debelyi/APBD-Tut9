@@ -35,13 +35,11 @@ public class ProductsWarehouseRepository : IProductsWarehouseRepository
             SqlTransaction transaction = conn.BeginTransaction();
             try
             {
-                var now = DateTime.UtcNow;
-
                 string updateOrderSql = "UPDATE [order] SET fulfilledAt = @now WHERE idOrder = @idOrder";
                 await using (SqlCommand comm = new(updateOrderSql, conn, transaction))
                 {
                     comm.Parameters.AddWithValue("@idOrder", idOrder);
-                    comm.Parameters.AddWithValue("@now", now);
+                    comm.Parameters.AddWithValue("@now", productWarehouseDto.CreatedAt);
                     await comm.ExecuteNonQueryAsync();
                 }
 
@@ -70,7 +68,7 @@ public class ProductsWarehouseRepository : IProductsWarehouseRepository
                     comm.Parameters.AddWithValue("@idOrder", idOrder);
                     comm.Parameters.AddWithValue("@amount", productWarehouseDto.Amount);
                     comm.Parameters.AddWithValue("@price", productWarehouseDto.Amount * price);
-                    comm.Parameters.AddWithValue("@createdAt", now);
+                    comm.Parameters.AddWithValue("@createdAt", productWarehouseDto.CreatedAt);
                     newId = Convert.ToInt32(await comm.ExecuteScalarAsync());
                 }
 
