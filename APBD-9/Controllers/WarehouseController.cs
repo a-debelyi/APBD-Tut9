@@ -21,5 +21,13 @@ namespace APBD_9.Controllers
             var productWarehouseId = await _productsWarehouseService.AddProductToWarehouseAsync(productWarehouseDto);
             return StatusCode(StatusCodes.Status201Created, new { id = productWarehouseId });
         }
+
+        [HttpPost("procedure")]
+        public async Task<IActionResult> AddProductToWarehouseViaProcedureAsync(ProductWarehouseDto productWarehouseDto)
+        {
+            var productWarehouseId =
+                await _productsWarehouseService.AddProductToWarehouseViaProcedureAsync(productWarehouseDto);
+            return StatusCode(StatusCodes.Status201Created, new { id = productWarehouseId });
+        }
     }
 }

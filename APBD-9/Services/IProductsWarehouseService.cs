@@ -5,4 +5,5 @@ namespace APBD_9.Services;
 public interface IProductsWarehouseService
 {
     Task<int> AddProductToWarehouseAsync(ProductWarehouseDto productWarehouseDto);
+    Task<int> AddProductToWarehouseViaProcedureAsync(ProductWarehouseDto productWarehouseDto);
 }

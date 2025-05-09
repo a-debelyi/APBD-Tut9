@@ -1,3 +1,5 @@
+using System.Data;
+using APBD_8.Exceptions;
 using APBD_9.DTOs;
 using Microsoft.Data.SqlClient;
 
@@ -34,7 +36,7 @@ public class ProductsWarehouseRepository : IProductsWarehouseRepository
             try
             {
                 var now = DateTime.UtcNow;
-                
+
                 string updateOrderSql = "UPDATE [order] SET fulfilledAt = @now WHERE idOrder = @idOrder";
                 await using (SqlCommand comm = new(updateOrderSql, conn, transaction))
                 {
@@ -79,6 +81,37 @@ public class ProductsWarehouseRepository : IProductsWarehouseRepository
             {
                 transaction.Rollback();
                 throw;
+            }
+        }
+    }
+
+    public async Task<int> FulfillOrderViaProcedureAsync(ProductWarehouseDto productWarehouseDto)
+    {
+        await using (SqlConnection conn = new(_connectionString))
+        await using (SqlCommand comm = new("AddProductToWarehouse", conn))
+        {
+            comm.CommandType = CommandType.StoredProcedure;
+            comm.Parameters.AddWithValue("@IdWarehouse", productWarehouseDto.IdWarehouse);
+            comm.Parameters.AddWithValue("@IdProduct", productWarehouseDto.IdProduct);
+            comm.Parameters.AddWithValue("@Amount", productWarehouseDto.Amount);
+            comm.Parameters.AddWithValue("@CreatedAt", productWarehouseDto.CreatedAt);
+
+            await conn.OpenAsync();
+            try
+            {
+                var newId = await comm.ExecuteScalarAsync();
+                return Convert.ToInt32(newId);
+            }
+            catch (SqlException e)
+            {
+                var err = e.Errors.Cast<SqlError>().First();
+                switch (err.State)
+                {
+                    case 1: throw new NotFoundException(err.Message);
+                    case 2: throw new NotFoundException(err.Message);
+                    case 3: throw new ConflictException(err.Message);
+                    default: throw;
+                }
             }
         }
     }

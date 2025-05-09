@@ -6,4 +6,5 @@ public interface IProductsWarehouseRepository
 {
     Task<bool> ProductWarehouseExistsAsync(int idOrder);
     Task<int> FulfillOrderAsync(ProductWarehouseDto productWarehouseDto, int idOrder);
+    Task<int> FulfillOrderViaProcedureAsync(ProductWarehouseDto productWarehouseDto);
 }

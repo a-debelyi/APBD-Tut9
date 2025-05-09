@@ -4,21 +4,15 @@ BEGIN
 
     DECLARE @IdOrder INT, @Price DECIMAL(5, 2);
 
-    IF @Amount <= 0
-        BEGIN
-            RAISERROR('Invalid parameter: Amount must be greater than 0', 18, 0);
-            RETURN;
-        END;
-
     IF NOT EXISTS(SELECT 1 FROM Warehouse WHERE IdWarehouse = @IdWarehouse)
         BEGIN
-            RAISERROR('Invalid parameter: Provided IdWarehouse does not exist', 18, 0);
+            RAISERROR('Invalid parameter: Provided IdWarehouse does not exist', 18, 1);
             RETURN;
         END;
 
     IF NOT EXISTS (SELECT 1 FROM Product WHERE IdProduct = @IdProduct)
         BEGIN
-            RAISERROR('Invalid parameter: Provided IdProduct does not exist', 18, 0);
+            RAISERROR('Invalid parameter: Provided IdProduct does not exist', 18, 2);
             RETURN;
         END;
     
@@ -37,7 +31,7 @@ BEGIN
 
     IF @IdOrder IS NULL
     BEGIN
-        RAISERROR('Invalid parameter: There is no order to fullfill', 18, 0);
+        RAISERROR('Invalid parameter: There is no order to fullfill', 18, 3);
         RETURN;
     END;
 

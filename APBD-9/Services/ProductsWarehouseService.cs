@@ -34,4 +34,9 @@ public class ProductsWarehouseService : IProductsWarehouseService
 
         return await _productsWarehouseRepository.FulfillOrderAsync(productWarehouseDto, order.IdOrder);
     }
+
+    public async Task<int> AddProductToWarehouseViaProcedureAsync(ProductWarehouseDto productWarehouseDto)
+    {
+        return await _productsWarehouseRepository.FulfillOrderViaProcedureAsync(productWarehouseDto);
+    }
 }
