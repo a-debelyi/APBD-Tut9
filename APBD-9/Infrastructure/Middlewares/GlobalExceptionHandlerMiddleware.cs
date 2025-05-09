@@ -24,11 +24,11 @@ public class GlobalExceptionHandlerMiddleware
         {
             await HandleApiExceptionAsync(context, ex);
         }
-        // catch (Exception ex)
-        // {
-        //     _logger.LogError(ex.Message);
-        //     await HandleUnknownExceptionAsync(context, ex);
-        // }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            await HandleUnknownExceptionAsync(context, ex);
+        }
     }
 
     private Task HandleApiExceptionAsync(HttpContext context, ApiException exception)
