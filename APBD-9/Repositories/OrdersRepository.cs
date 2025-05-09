@@ -18,6 +18,7 @@ public class OrdersRepository : IOrdersRepository
                 SELECT TOP 1 idOrder, createdAt
                 FROM [order]
                 WHERE idProduct = @idProduct AND amount = @amount AND createdAt < @createdAt
+                ORDER BY createdAt DESC;
         ";
 
         await using SqlConnection conn = new(_connectionString);
