@@ -15,7 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
+      <Folder Include="Application\" />
+      <Folder Include="Core\" />
+      <Folder Include="Infrastructure\" />
     </ItemGroup>
 
 </Project>
